@@ -7,7 +7,7 @@
     "lint": "eslint \"src/**/*.ts\"",
     "test": "jest",
     "build": "tsc",
-    "dist": "npm run lint && npm run build && node esbuild.config.mjs"
+    "dist": "npm run lint && npm run build && npm run test && node esbuild.config.mjs"
   },
   "author": "",
   "license": "ISC",

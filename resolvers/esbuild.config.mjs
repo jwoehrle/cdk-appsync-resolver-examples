@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild'
 
 await esbuild.build({
-    entryPoints: [ 'src/http/resolver.ts'],
+    entryPoints: [ 'src/http/todo-resolver.ts'],
     bundle: true,
     sourcemap: "inline",
     sourcesContent: false,

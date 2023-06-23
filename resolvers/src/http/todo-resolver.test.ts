@@ -1,6 +1,6 @@
 // @ts-nocheck
 // TODO do we want strict TS checking ? Find out if we can mock parts of Context
-import {request} from "./resolver";
+import {request} from "./todo-resolver";
 import {Context} from "@aws-appsync/utils";
 
 test('returns get with right ID', () => {
