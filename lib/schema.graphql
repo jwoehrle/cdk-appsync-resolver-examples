@@ -1,0 +1,22 @@
+type Todo {
+    id: ID
+    title: String
+    completed: Boolean
+    createdAt: AWSDateTime @deprecated
+    completedAt: AWSDateTime
+}
+
+type Query {
+    getTodoWithUnitResolver(id: ID!): Todo
+    getTodoWithPiplineResolver(id: ID!): Todo
+}
+
+type Mutation {
+    updateTodo(id: ID!, title: String): Todo
+
+}
+
+type Subscription {
+    onUpdateTodo: Todo
+    @aws_subscribe(mutations: ["updateTodo"])
+}
