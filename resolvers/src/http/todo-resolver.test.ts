@@ -4,8 +4,9 @@ import {request} from "./todo-resolver";
 import {Context} from "@aws-appsync/utils";
 
 test('returns get with right ID', () => {
+    const id = 1;
     const context: Context = {
-        arguments: { id: 1 },
+        arguments: { id: id },
         identity: null,
         args: null,
         source: null,
@@ -17,7 +18,12 @@ test('returns get with right ID', () => {
     }
     const result = request(context)
     expect(result).toEqual({
-        method: 'GET',
-        resourcePath: `/todos/1`,
+        payload: {
+            id: id,
+            title: "Buy groceries",
+            completed: false,
+            createdAt: "2023-08-24T09:12:44.609Z",
+            completedAt: null
+        }
     });
 });

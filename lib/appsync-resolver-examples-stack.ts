@@ -4,6 +4,9 @@ import {Construct} from 'constructs';
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import {RetentionDays} from "aws-cdk-lib/aws-logs";
 import * as path from "path";
+import {Source} from "aws-cdk-lib/aws-s3-deployment";
+import {execSync, ExecSyncOptions} from "child_process";
+import * as fs from "fs";
 
 export class AppsyncResolverExamplesStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -27,7 +30,7 @@ export class AppsyncResolverExamplesStack extends cdk.Stack {
 
         const noneDS = api.addNoneDataSource('NoneDS');
 
-
+        const execOptions: ExecSyncOptions = { stdio: ['ignore', process.stderr, 'inherit'] };
 
         api.createResolver('GetTodoResolver', {
             typeName: 'Query',
@@ -42,10 +45,25 @@ export class AppsyncResolverExamplesStack extends cdk.Stack {
                         NPM_CONFIG_CACHE: '/tmp/.npm-cache',
                         NODE_OPTIONS: '--dns-result-order=ipv4first',
                     },
-                    command: ['bash', '-c', ['npm install', 'npm run build','npm run dist', 'cp dist/appsync/todo-resolver.js /asset-output/todo-resolver.jar',].join(' && '),]
+                    command: ['bash', '-c', ['mkdir -p /tmp/.npm-global','cd /asset-input','npm install', 'npm run build','npm run dist', 'cp dist/appsync/* /asset-output',].join(' && '),],
+                    local: {
+                        tryBundle(outputDir: string) {
+                            try {
+                                execSync('esbuild --version', execOptions);
+                            } catch {
+                                console.log("esbuild not found locally, using docker build")
+                                return false;
+                            }
+                            execSync('npm run dist', execOptions);
+                            fs.copyFileSync(path.join(__dirname, '..', 'resolvers', 'dist', '*'), outputDir );
+                            return true;
+                        },
+                    },
                 }
             }),
           dataSource: noneDS
         });
+
+
     }
 }
