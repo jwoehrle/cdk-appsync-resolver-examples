@@ -45,7 +45,7 @@ export class AppsyncResolverExamplesStack extends cdk.Stack {
                         NPM_CONFIG_CACHE: '/tmp/.npm-cache',
                         NODE_OPTIONS: '--dns-result-order=ipv4first',
                     },
-                    command: ['bash', '-c', ['mkdir -p /tmp/.npm-global','cd /asset-input','npm install', 'npm run build','npm run dist', 'cp dist/appsync/* /asset-output',].join(' && '),],
+                    command: ['bash', '-c', ['npm install', 'npm run build','npm run dist', 'cp dist/appsync/* /asset-output',].join(' && '),],
                     local: {
                         tryBundle(outputDir: string) {
                             try {
